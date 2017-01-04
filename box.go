@@ -101,7 +101,7 @@ func (c *Client) Do(req *http.Request, respStr interface{}) (*http.Response, err
 	defer resp.Body.Close()
 
 	if resp.StatusCode > 299 || resp.StatusCode < 200 {
-		return nil, errors.New(fmt.Sprintf("http request failed, resp: %#v", resp))
+		return resp, errors.New(fmt.Sprintf("http request failed, resp: %#v", resp))
 	}
 
 	// TODO(ttacon): maybe support passing in io.Writer as resp (downloads)?
