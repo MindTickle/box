@@ -96,14 +96,13 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 func (c *Client) Do(req *http.Request, respStr interface{}) (*http.Response, error) {
 	resp, err := c.Client.Do(req)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode > 299 || resp.StatusCode < 200 {
 		return resp, errors.New(fmt.Sprintf("http request failed, resp: %#v", resp))
 	}
-
 	// TODO(ttacon): maybe support passing in io.Writer as resp (downloads)?
 	if respStr != nil {
 		err = json.NewDecoder(resp.Body).Decode(respStr)

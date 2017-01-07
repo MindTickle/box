@@ -66,6 +66,20 @@ func (c *FolderService) CreateFolder(name string, parent int) (*http.Response, *
 // strings in the API
 // TODO(ttacon): return the response for the user to play with if they want
 // Documentation: https://developers.box.com/docs/#folders-get-information-about-a-folder
+func (c *FolderService) GetFolderInfo(folderId string) (*http.Response, *Item, error) {
+	req, err := c.NewRequest(
+		"GET",
+		fmt.Sprintf("/folders/%s", folderId),
+		nil,
+	)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var data Item
+	resp, err := c.Do(req, &data)
+	return resp, &data, err
+}
 func (c *FolderService) GetFolder(folderId string) (*http.Response, *Folder, error) {
 	req, err := c.NewRequest(
 		"GET",
@@ -83,19 +97,35 @@ func (c *FolderService) GetFolder(folderId string) (*http.Response, *Folder, err
 
 // TODO(ttacon): return the response for the user to play with if they want
 // Documentation: https://developers.box.com/docs/#folders-retrieve-a-folders-items
-func (c *FolderService) GetFolderItems(folderId string) (*http.Response, *ItemCollection, error) {
+func (c *FolderService) GetFolderItemsLimit(folderId string, offset, limit int) (*http.Response, *ItemCollection, error) {
 	req, err := c.NewRequest(
 		"GET",
-		fmt.Sprintf("/folders/%s/items", folderId),
+		fmt.Sprintf("/folders/%s/items?limit=%d&offset=%d", folderId, limit, offset),
 		nil,
 	)
 	if err != nil {
 		return nil, nil, err
 	}
-
 	var data ItemCollection
 	resp, err := c.Do(req, &data)
 	return resp, &data, err
+}
+func (c *FolderService) GetFolderItems(folderId string) (*http.Response, *ItemCollection, error) {
+	offset, limit := 0, 100
+	rsp, collection, err := c.GetFolderItemsLimit(folderId, offset, limit)
+	totalCount := collection.TotalCount
+	offset += limit
+	for offset < totalCount {
+		rsp, ic, err := c.GetFolderItemsLimit(folderId, offset, limit)
+		if err != nil {
+			return rsp, nil, err
+		}
+		for _, element := range ic.Entries {
+			collection.Entries = append(collection.Entries, element)
+		}
+		offset += limit
+	}
+	return rsp, collection, err
 }
 
 // TODO(ttacon): https://developers.box.com/docs/#folders-update-information-about-a-folder

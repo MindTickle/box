@@ -221,41 +221,21 @@ func (c *FileService) GetThumbnail(fileId string) (*http.Response, error) {
 }
 
 // Documentation: https://developers.box.com/docs/#files-create-a-shared-link-for-a-file
-func (c *FileService) CreateSharedLinkForFile(fileId, access, unsharedAt string, canDownload, canPreview bool) (*http.Response, *File, error) {
-	var dataMap = make(map[string]interface{})
-	if len(access) > 0 {
-		dataMap["access"] = access
-	}
-	// TODO(ttacon): support unshared_at as time.Time
-	// TODO(ttacon): validate access is open or company before add permissions
-	if canDownload {
-		dataMap["permissions"] = map[string]bool{
-			"can_download": canDownload,
-		}
-	}
-	if canPreview {
-		if m, ok := dataMap["permissions"]; ok {
-			mVal, _ := m.(map[string]bool)
-			mVal["can_preview"] = canPreview
-		} else {
-			dataMap["permissions"] = map[string]bool{
-				"can_preview": canPreview,
-			}
-		}
-	}
-
+func (c *FileService) CreateSharedLinkForFile(fileId string, options *SharedLinkOptions) (*http.Response, *File, error) {
 	req, err := c.NewRequest(
 		"PUT",
 		fmt.Sprintf("/files/%s", fileId),
-		dataMap,
+		map[string]interface{}{
+			"shared_link": options,
+		},
 	)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var data File
-	resp, err := c.Do(req, &data)
-	return resp, &data, err
+	var file File
+	resp, err := c.Do(req, &file)
+	return resp, &file, err
 }
 
 // Documentation: https://developers.box.com/docs/#files-get-a-trashed-file
