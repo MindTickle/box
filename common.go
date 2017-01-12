@@ -27,13 +27,13 @@ type PathCollection struct {
 }
 
 type Item struct {
-	Type       string  `json:"type,omitempty"` // TODO(ttacon): make this an enum eventually
-	ID         string  `json:"id,omitempty"`
-	SequenceId string  `json:"sequence_id,omitempty"` // no idea what this is supposed to be
-	ETag       *string `json:"etag,omitempty"`        // again, not sure what this type is supposed to be
-	Name       string  `json:"name,omitempty"`
-	Login      string  `json:"login,omitempty"`
-	SHA1       string  `json:"sha"`
+	Type       string `json:"type,omitempty"` // TODO(ttacon): make this an enum eventually
+	ID         string `json:"id,omitempty"`
+	SequenceId string `json:"sequence_id,omitempty"` // no idea what this is supposed to be
+	ETag       string `json:"etag,omitempty"`        // again, not sure what this type is supposed to be
+	Name       string `json:"name,omitempty"`
+	Login      string `json:"login,omitempty"`
+	SHA1       string `json:"sha"`
 }
 
 // TODO(ttacon): leave plurality?

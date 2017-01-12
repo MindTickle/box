@@ -33,7 +33,7 @@ type File struct {
 	PurgedAt          *string         `json:"purged_at"`           // TODO(ttacon): change to time.Time, this field isn't documented but I keep getting it back...
 	SharedLinkg       *string         `json:"shared_link"`
 	SequenceId        string          `json:"sequence_id"`
-	ETag              *string         `json:"etag"`
+	ETag              string          `json:"etag"`
 	Name              string          `json:"name"`
 	CreatedAt         *string         `json:"created_at"` // TODO(ttacon): change to time.Time
 	OwnedBy           *Item           `json:"owned_by"`
