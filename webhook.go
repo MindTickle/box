@@ -48,7 +48,7 @@ func (c *WebhookService) CreateWebhook(id, ftype, webhookUrl string, triggers []
 	resp, err := c.Do(req, &data)
 	return resp, &data, err
 }
-func (c *WebhookService) DeleteTask(webhookId string) (*http.Response, error) {
+func (c *WebhookService) DeleteWebhook(webhookId string) (*http.Response, error) {
 	req, err := c.NewRequest(
 		"DELETE",
 		fmt.Sprintf("/webhooks/%s", webhookId),
