@@ -185,3 +185,9 @@ func (c *Client) SharedService() *SharedService {
 		Client: c,
 	}
 }
+
+func (c *Client) WebhookService() *WebhookService {
+	return &WebhookService{
+		Client: c,
+	}
+}
