@@ -13,17 +13,17 @@ type Webhook struct {
 	Type   string `json:"type"`
 	Id     string `json:"id"`
 	Target struct {
-		Id   string
-		Type string
+		Id   string `json:"id"`
+		Type string `json:"type"`
 	}
 	CreatedBy struct {
-		Login string
-		Name  string
-		Type  string
+		Login string `json:"login"`
+		Name  string `json:"name"`
+		Type  string `json:"type"`
 	} `json:"created_by"`
-	CreatedAt string `json:"created_at"`
-	Address   string
-	Triggers  []string
+	CreatedAt string   `json:"created_at"`
+	Address   string   `json:"address"`
+	Triggers  []string `json:"triggers"`
 }
 
 func (c *WebhookService) CreateWebhook(id, ftype, webhookUrl string, triggers []string) (*http.Response, *Webhook, error) {
